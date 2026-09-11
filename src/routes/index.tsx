@@ -5,6 +5,8 @@ import liquidityMark from "@/assets/liquidity-mark.png";
 import { SignalDuo } from "@/components/SignalDuo";
 import themeSong from "./theme.mp3";
 import logoMark from "@/assets/logo-mark.png";
+import { translations, useLanguage } from "./i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,6 +33,8 @@ export const Route = createFileRoute("/")({
 function Index() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
+  const { lang, setLang } = useLanguage();
+  const t = translations[lang];
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -79,7 +83,7 @@ function Index() {
       <button
         type="button"
         onClick={toggleMusic}
-        aria-label={playing ? "Mute music" : "Play music"}
+        aria-label={playing ? t.mute_music : t.play_music}
         className="fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-signal/50 bg-void/80 text-void-fg backdrop-blur transition-transform hover:scale-105"
       >
         {playing ? "🔊" : "🔇"}
@@ -106,50 +110,53 @@ function Index() {
 
           <nav className="hidden items-center gap-9 text-[0.95rem] text-hero-fg/90 md:flex">
             <a className="transition-opacity hover:opacity-70" href="#solutions">
-              Protocol
+              {t.nav_protocol}
             </a>
             <Link className="transition-opacity hover:opacity-70" to="/questions">
-              Questions
+              {t.nav_questions}
             </Link>
             <a className="transition-opacity hover:opacity-70" href="#how-it-works">
-              How it works
+              {t.nav_how}
             </a>
             <a className="transition-opacity hover:opacity-70" href="#early-insight">
-              Contact
+              {t.nav_contact}
             </a>
           </nav>
 
-          <a
-            href="https://www.standardreserve.xyz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-hero-fg px-6 py-3 text-[0.95rem] font-medium text-hero-ink shadow-soft transition-transform hover:scale-[1.03]"
-          >
-            Official site
-          </a>
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher lang={lang} onChange={setLang} />
+
+            <a
+              href="https://www.standardreserve.xyz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-hero-fg px-6 py-3 text-[0.95rem] font-medium text-hero-ink shadow-soft transition-transform hover:scale-[1.03]"
+            >
+              {t.official_site}
+            </a>
+          </div>
         </header>
 
         <section className="relative z-10 flex min-h-[calc(100vh-6.5rem)] flex-col items-center justify-center px-6 pb-24 text-center">
           <h1 className="max-w-4xl text-[2.75rem] font-medium leading-[1.05] tracking-tight text-hero-fg drop-shadow-hero sm:text-6xl md:text-7xl">
-            A sovereign onchain central bank
+            {t.hero_title}
           </h1>
           <p className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-hero-fg/85 md:text-xl">
-            Information on how The Standard Reserve's Charter and Branch
-            model ties $STANDARD issuance to real ETH flow.
+            {t.hero_desc}
           </p>
 
           <a
             href="#solutions"
             className="mt-10 rounded-full bg-hero-fg px-9 py-4 text-lg font-medium text-hero-ink shadow-soft transition-transform hover:scale-[1.03]"
           >
-            Learn how it works
+            {t.learn_how}
           </a>
 
           <a
             href="#how-it-works"
             className="mt-6 text-[0.95rem] text-hero-fg/85 underline-offset-4 transition-opacity hover:opacity-70"
           >
-            How it works
+            {t.how_it_works_link}
           </a>
         </section>
       </div>
@@ -165,15 +172,13 @@ function Index() {
           <div className="relative z-10 lg:col-span-6">
             <p className="mb-7 flex items-center gap-3 text-xs font-medium uppercase text-signal-soft">
               <span className="h-px w-8 bg-signal" />
-              Protocol mechanics
+              {t.mechanics_label}
             </p>
             <h2 className="max-w-[10ch] text-[3.25rem] font-light leading-[0.98] sm:text-6xl lg:text-7xl xl:text-[5.4rem]">
-              Charters, Branches, and Issuance.
+              {t.mechanics_title}
             </h2>
             <p className="mt-10 max-w-md text-[0.95rem] leading-7 text-void-muted sm:text-base">
-              The Standard Reserve is inspired by Olympus DAO (OHM), but ties
-              $STANDARD issuance to real ETH flow through Charters and
-              Branches instead of artificial yield.
+              {t.mechanics_desc}
             </p>
 
             <div className="mt-10 flex max-w-lg items-center" aria-hidden="true">
@@ -193,19 +198,17 @@ function Index() {
 
           <div className="relative z-10 mt-12 border-t border-void-line pt-8 lg:col-span-6 lg:col-start-7 lg:mt-[-3rem] lg:pt-7">
             <p className="max-w-xl text-[0.95rem] leading-7 text-void-muted sm:text-base">
-              The mechanism is reflexive by design: more ETH in expands
-              issuance and builds reserves, more ETH out contracts it while
-              the treasury buys back and burns $STANDARD to defend the peg.
+              {t.reflexive_desc}
             </p>
             <div className="mt-8 flex items-center gap-3 text-xs uppercase text-signal-soft">
               <span className="h-1.5 w-1.5 bg-signal" />
-              Currently pre-launch
+              {t.prelaunch}
             </div>
           </div>
         </div>
       </section>
 
-      <SignalDuo />
+      <SignalDuo lang={lang} />
 
       <section
         id="how-it-works"
@@ -218,35 +221,22 @@ function Index() {
             <div>
               <p className="mb-7 flex items-center gap-3 text-xs font-medium uppercase text-signal-soft">
                 <span className="h-px w-8 bg-signal" />
-                The mechanics, broken down
+                {t.breakdown_label}
               </p>
               <h2 className="max-w-[16ch] text-[2.75rem] font-light leading-[1.02] sm:text-5xl lg:text-6xl">
-                From Charter to Branch to Reserve.
+                {t.breakdown_title}
               </h2>
             </div>
             <p className="max-w-sm text-[0.95rem] leading-7 text-void-muted">
-              Only 1,000 Founding Charters will ever exist at genesis. Each
-              unlocks a Branch that earns $STANDARD for as long as it's open.
+              {t.breakdown_desc}
             </p>
           </div>
 
           <ol className="grid grid-cols-1 gap-px overflow-hidden bg-void-line/60 md:grid-cols-3">
             {[
-              {
-                step: "01",
-                title: "Charter",
-                body: "The first 1,000 Genesis Charters are free, soulbound licenses to operate in the network. Later Charters are won via daily Dutch auction.",
-              },
-              {
-                step: "02",
-                title: "Branch",
-                body: "Every Charter opens a Branch that earns $STANDARD daily. Expand to up to 10 Branches by auctioning for expansion licenses.",
-              },
-              {
-                step: "03",
-                title: "Reserve",
-                body: "Close a Branch to claim your $STANDARD, minus a dynamic exit fee: half burned, half shared with those who stay.",
-              },
+              { step: "01", title: t.step1_title, body: t.step1_body },
+              { step: "02", title: t.step2_title, body: t.step2_body },
+              { step: "03", title: t.step3_title, body: t.step3_body },
             ].map((item) => (
               <li
                 key={item.step}
@@ -273,7 +263,7 @@ function Index() {
             className="mt-20 flex scroll-mt-24 flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between"
           >
             <p className="max-w-lg text-xl font-light leading-relaxed sm:text-2xl">
-              Want the full mechanics? Read the official whitepaper.
+              {t.whitepaper_cta}
             </p>
             <a
               href="https://www.standardreserve.xyz"
@@ -281,7 +271,7 @@ function Index() {
               rel="noopener noreferrer"
               className="rounded-full bg-signal px-8 py-4 text-[0.95rem] font-medium text-void transition-transform hover:scale-[1.03]"
             >
-              Visit official site
+              {t.visit_site}
             </a>
           </div>
         </div>

@@ -1,51 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import scoutAsset from "@/assets/scout-thinking.png";
 import sparkAsset from "@/assets/spark-verdict.png";
+import { SD_TOPIC_IDS, sdTranslations, type LangCode, type SDTopicId } from "../lib/i18n";
 
-type Verdict = {
-  signal: string;
-  read: string;
-  move: string;
-  confidence: number;
-};
-
-const VERDICTS: Record<string, Verdict> = {
-  Pricing: {
-    signal: "Two rivals trimmed list price within 36 hours of each other.",
-    read: "This is a coordinated floor test, not a promo cycle.",
-    move: "Hold your price and lead with contract length instead.",
-    confidence: 88,
-  },
-  Supply: {
-    signal: "Lead times on your second-tier suppliers slipped 9 days.",
-    read: "Upstream capacity is tightening before it shows in quotes.",
-    move: "Pre-book Q3 volume this week, before rates reprice.",
-    confidence: 92,
-  },
-  Talent: {
-    signal: "Senior hiring in your category jumped 24% month over month.",
-    read: "A competitor is staffing for a launch, not for churn.",
-    move: "Lock your top 5 engineers now with retention offers.",
-    confidence: 76,
-  },
-  Demand: {
-    signal: "Search intent rose in three regions you barely serve.",
-    read: "Demand is forming ahead of your distribution footprint.",
-    move: "Open a lightweight channel test in the strongest region.",
-    confidence: 84,
-  },
-};
-
-const TOPICS = Object.keys(VERDICTS);
-
-export function SignalDuo() {
-  const [topic, setTopic] = useState<string | null>(null);
+export function SignalDuo({ lang }: { lang: LangCode }) {
+  const [topic, setTopic] = useState<SDTopicId | null>(null);
   const [scanning, setScanning] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sd = sdTranslations[lang];
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
-  const run = (next: string) => {
+  const run = (next: SDTopicId) => {
     if (timer.current) clearTimeout(timer.current);
     setTopic(null);
     setScanning(true);
@@ -55,7 +21,7 @@ export function SignalDuo() {
     }, 1400);
   };
 
-  const verdict = topic ? VERDICTS[topic] : null;
+  const verdict = topic ? sd.verdicts[topic] : null;
 
   return (
     <section
@@ -67,15 +33,14 @@ export function SignalDuo() {
       <div className="relative mx-auto max-w-[94rem] px-6 py-24 sm:px-10 md:px-14 lg:px-20 lg:py-32">
         <p className="mb-7 flex items-center gap-3 text-xs font-medium uppercase text-signal-soft">
           <span className="h-px w-8 bg-signal" />
-          The signal desk
+          {sd.heading}
         </p>
         <div className="flex flex-col gap-8 border-b border-void-line pb-14 lg:flex-row lg:items-end lg:justify-between">
           <h2 className="max-w-[16ch] text-[2.75rem] font-light leading-[1.02] sm:text-5xl lg:text-6xl">
-            Meet Scout and Spark.
+            {sd.title}
           </h2>
           <p className="max-w-sm text-[0.95rem] leading-7 text-void-muted">
-            Scout reads the noise. Spark calls the move. Pick a signal below and
-            watch them work a real shift end to end.
+            {sd.subtitle}
           </p>
         </div>
 
@@ -105,9 +70,9 @@ export function SignalDuo() {
                 </span>
               )}
             </div>
-            <p className="mt-5 text-lg font-light">Scout</p>
+            <p className="mt-5 text-lg font-light">{sd.scoutName}</p>
             <p className="mt-1 text-xs uppercase tracking-widest text-void-muted">
-              Reads the noise
+              {sd.scoutTag}
             </p>
           </div>
 
@@ -115,20 +80,20 @@ export function SignalDuo() {
           <div className="lg:col-span-6">
             <div className="border border-void-line bg-void-fg/[0.02] p-6 sm:p-8">
               <p className="text-xs uppercase tracking-widest text-void-muted">
-                Choose a signal to trace
+                {sd.choose}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
-                {TOPICS.map((t) => (
+                {SD_TOPIC_IDS.map((id) => (
                   <button
-                    key={t}
-                    onClick={() => run(t)}
+                    key={id}
+                    onClick={() => run(id)}
                     className={`rounded-full border px-5 py-2.5 text-sm transition-colors ${
-                      topic === t
+                      topic === id
                         ? "border-signal bg-signal text-void"
                         : "border-void-line text-void-fg hover:border-signal/70 hover:text-signal-soft"
                     }`}
                   >
-                    {t}
+                    {sd.topics[id]}
                   </button>
                 ))}
               </div>
@@ -145,23 +110,22 @@ export function SignalDuo() {
               <div className="mt-7 min-h-[15rem]">
                 {!topic && !scanning && (
                   <p className="text-[0.95rem] leading-7 text-void-muted">
-                    Nothing on the desk yet. Pick a signal and Scout will start
-                    scanning your ecosystem for deviations.
+                    {sd.empty}
                   </p>
                 )}
 
                 {scanning && (
                   <p className="text-[0.95rem] leading-7 text-signal-soft">
-                    Scout is separating movement from noise…
+                    {sd.scanning}
                   </p>
                 )}
 
                 {verdict && !scanning && (
                   <div className="space-y-6">
                     {[
-                      { label: "Signal", value: verdict.signal },
-                      { label: "Read", value: verdict.read },
-                      { label: "Move", value: verdict.move },
+                      { label: sd.labelSignal, value: verdict.signal },
+                      { label: sd.labelRead, value: verdict.read },
+                      { label: sd.labelMove, value: verdict.move },
                     ].map((row) => (
                       <div key={row.label} className="border-l border-signal pl-5">
                         <p className="text-xs uppercase tracking-widest text-signal-soft">
@@ -175,7 +139,7 @@ export function SignalDuo() {
 
                     <div>
                       <div className="flex items-center justify-between text-xs uppercase tracking-widest text-void-muted">
-                        <span>Confidence</span>
+                        <span>{sd.confidenceLabel}</span>
                         <span className="text-signal">{verdict.confidence}%</span>
                       </div>
                       <div className="mt-3 h-1 w-full bg-void-line">
@@ -204,13 +168,13 @@ export function SignalDuo() {
               />
               {verdict && !scanning && (
                 <span className="absolute -left-3 -top-1 rounded-full border border-signal bg-void px-3 py-1.5 text-xs text-signal">
-                  Call it
+                  {sd.callIt}
                 </span>
               )}
             </div>
-            <p className="mt-5 text-lg font-light">Spark</p>
+            <p className="mt-5 text-lg font-light">{sd.sparkName}</p>
             <p className="mt-1 text-xs uppercase tracking-widest text-void-muted">
-              Calls the move
+              {sd.sparkTag}
             </p>
           </div>
         </div>
