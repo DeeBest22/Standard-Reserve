@@ -9,17 +9,17 @@ import logoMark from "@/assets/logo-mark.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "The Standard Reserve: A Protocol Thesis" },
+      { title: "The Standard Reserve" },
       {
         name: "description",
         content:
-          "An independent analysis of The Standard Reserve: how its Charter and Branch model ties issuance to real ETH flow, and whether the design holds up.",
+          "Information on The Standard Reserve: an onchain central bank protocol built on Charters, Branches, and ETH-flow-based issuance.",
       },
-      { property: "og:title", content: "The Standard Reserve: A Protocol Thesis" },
+      { property: "og:title", content: "The Standard Reserve" },
       {
         property: "og:description",
         content:
-          "An independent analysis of The Standard Reserve: how its Charter and Branch model ties issuance to real ETH flow, and whether the design holds up.",
+          "Information on The Standard Reserve: an onchain central bank protocol built on Charters, Branches, and ETH-flow-based issuance.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -76,6 +76,14 @@ function Index() {
     <main className="w-full overflow-hidden font-display">
       <audio ref={audioRef} src={themeSong} loop preload="auto" />
 
+      <button
+        type="button"
+        onClick={toggleMusic}
+        aria-label={playing ? "Mute music" : "Play music"}
+        className="fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-signal/50 bg-void/80 text-void-fg backdrop-blur transition-transform hover:scale-105"
+      >
+        {playing ? "🔊" : "🔇"}
+      </button>
       <div className="relative min-h-screen">
         <img
           src={heroAsset}
@@ -123,18 +131,18 @@ function Index() {
 
         <section className="relative z-10 flex min-h-[calc(100vh-6.5rem)] flex-col items-center justify-center px-6 pb-24 text-center">
           <h1 className="max-w-4xl text-[2.75rem] font-medium leading-[1.05] tracking-tight text-hero-fg drop-shadow-hero sm:text-6xl md:text-7xl">
-            Does The Standard Reserve fix DeFi's inflation problem?
+            A sovereign onchain central bank
           </h1>
           <p className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-hero-fg/85 md:text-xl">
-            An independent analysis of the Charter and Branch model behind
-            this onchain central bank, and whether the design holds up.
+            Information on how The Standard Reserve's Charter and Branch
+            model ties $STANDARD issuance to real ETH flow.
           </p>
 
           <a
             href="#solutions"
             className="mt-10 rounded-full bg-hero-fg px-9 py-4 text-lg font-medium text-hero-ink shadow-soft transition-transform hover:scale-[1.03]"
           >
-            Read the analysis
+            Learn how it works
           </a>
 
           <a
@@ -157,15 +165,15 @@ function Index() {
           <div className="relative z-10 lg:col-span-6">
             <p className="mb-7 flex items-center gap-3 text-xs font-medium uppercase text-signal-soft">
               <span className="h-px w-8 bg-signal" />
-              The core thesis
+              Protocol mechanics
             </p>
             <h2 className="max-w-[10ch] text-[3.25rem] font-light leading-[0.98] sm:text-6xl lg:text-7xl xl:text-[5.4rem]">
-              Fixing Olympus DAO's fatal flaw.
+              Charters, Branches, and Issuance.
             </h2>
             <p className="mt-10 max-w-md text-[0.95rem] leading-7 text-void-muted sm:text-base">
-              Olympus DAO collapsed 98% on unsustainable, artificial yield. The
-              Standard Reserve's bet: tie issuance to real ETH flow through
-              Charters and Branches instead: a harder number to fake.
+              The Standard Reserve is inspired by Olympus DAO (OHM), but ties
+              $STANDARD issuance to real ETH flow through Charters and
+              Branches instead of artificial yield.
             </p>
 
             <div className="mt-10 flex max-w-lg items-center" aria-hidden="true">
