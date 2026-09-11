@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LANGUAGES, type LangCode } from "../lib/i18n";
+import { LANGUAGES, type LangCode } from "../routes/i18n";
 
 function GlobeIcon() {
   return (
@@ -70,17 +70,18 @@ export function LanguageSwitcher({
   }, [open]);
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative shrink-0">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label="Select language"
-        className="flex items-center gap-2 rounded-full border border-hero-fg/30 bg-hero-fg/10 px-4 py-2.5 text-sm font-medium text-hero-fg backdrop-blur transition-colors hover:border-hero-fg/60 hover:bg-hero-fg/20"
+        className="flex items-center gap-1.5 whitespace-nowrap rounded-full border border-hero-fg/30 bg-hero-fg/10 px-3 py-2 text-sm font-medium text-hero-fg backdrop-blur transition-colors hover:border-hero-fg/60 hover:bg-hero-fg/20 sm:gap-2 sm:px-4 sm:py-2.5"
       >
         <GlobeIcon />
-        <span>{current.label}</span>
+        <span className="sm:hidden">{current.code.toUpperCase()}</span>
+        <span className="hidden sm:inline">{current.label}</span>
         <ChevronIcon open={open} />
       </button>
 
